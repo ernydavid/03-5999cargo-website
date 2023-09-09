@@ -95,9 +95,9 @@ export const NavigationBar = () => {
         </NavbarItem>
         <NavbarItem>
           <Button
-            className="text-foreground flex justify-center items-center px-2"
+            className="text-foreground flex justify-center items-center px-2 rounded-full"
             color="secondary"
-            variant="ghost"
+            variant="bordered"
             startContent={<UserCircleIcon className="h-5 text-foreground" />}
           >
             Germaine
