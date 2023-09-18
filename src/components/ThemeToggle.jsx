@@ -23,48 +23,38 @@ const ICONS = [
 
 ]
 
-
 export const ThemeToggle = ({ className }) => {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') ? localStorage.getItem('theme') : 'system');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') ? localStorage.getItem('theme') : 'system')
 
   useEffect(() => {
-
-    function onWindowMatch() {
+    function onWindowMatch () {
       if (localStorage.theme === 'dark' || (!('theme' in localStorage) && DEFAULT_THEME.matches)) {
         DOCUMENT.classList.add('dark')
-      }
-      else {
-        DOCUMENT.classList.remove('dark');
+      } else {
+        DOCUMENT.classList.remove('dark')
       }
     }
     switch (theme) {
       case 'dark':
-        DOCUMENT.classList.add('dark');
+        DOCUMENT.classList.add('dark')
         localStorage.setItem('theme', 'dark')
-        break;
+        break
       case 'light':
         DOCUMENT.classList.remove('dark')
         localStorage.theme = 'light'
-        break;
+        break
       default:
         localStorage.removeItem('theme')
         onWindowMatch()
-        break;
+        break
     }
 
     DEFAULT_THEME.addEventListener('change', (ev) => {
       if (!(localStorage.getItem('theme'))) {
-        ev.matches ? DOCUMENT.classList.add('dark') : DOCUMENT.classList.remove('dark');
+        ev.matches ? DOCUMENT.classList.add('dark') : DOCUMENT.classList.remove('dark')
       }
-      else {
-        return
-      }
-
     })
-
   }, [theme])
-
-
 
   return (
     <div

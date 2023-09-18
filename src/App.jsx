@@ -1,7 +1,7 @@
-import { Hero, NavigationBar, ThemeToggle } from './components'
+import { Hero, NavigationBar } from './components'
 import './App.css'
 
-export function App() {
+export function App () {
   return (
     <>
 
