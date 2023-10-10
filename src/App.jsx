@@ -1,13 +1,38 @@
-import { Hero, NavigationBar } from './components'
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import { lazy } from 'react'
+import { Layout } from './pages'
+import { CouponDetails } from './pages/CouponDetails'
 
-export function App () {
+const LazyHomePage = lazy(() => import('./pages/HomePage'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const ErrorPage = lazy(() => import('./pages/ErrorPage'))
+const UserLogin = lazy(() => import('./pages/UserLogin'))
+const UserRegister = lazy(() => import('./pages/UserRegister'))
+const LoyaltySystemPage = lazy(() => import('./pages/LoyaltySystemPage'))
+const SettingsUserPage = lazy(() => import('./pages/SettingsUserPage'))
+const ConfirmedEmailPage = lazy(() => import('./pages/ConfirmedEmailPage'))
+const CouponsPage = lazy(() => import('./pages/CouponsPage'))
+const HubsPage = lazy(() => import('./pages/HubsPage'))
+
+export default function App () {
   return (
-    <>
+    <Routes>
+      <Route
+        path='/' Component={Layout} errorElement={ErrorPage}
+      >
 
-      <NavigationBar />
-      <Hero />
-
-    </>
+        <Route index element={<LazyHomePage />} />
+        <Route path='/dashboard' index element={<Dashboard />} />
+        <Route path='/register' index element={<UserRegister />} />
+        <Route path='/login' index element={<UserLogin />} />
+        <Route path='/account' index element={<ConfirmedEmailPage />} />
+        <Route path='/hubs' index element={<HubsPage />} />
+        <Route path='/services/loyaltySystem' index element={<LoyaltySystemPage />} />
+        <Route path='/coupons&promotions' index element={<CouponsPage />} />
+        <Route path='/coupons&promotions/:couponID' index element={<CouponDetails />} />
+        <Route path='/accountSettings' index element={<SettingsUserPage />} />
+        <Route path='*' element={<ErrorPage />} />
+      </Route>
+    </Routes>
   )
 }
