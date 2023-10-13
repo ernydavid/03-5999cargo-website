@@ -10,10 +10,13 @@ import { useUser } from '../hooks/useUser'
 import { UserContext } from '../context/userContext'
 
 export const NavigationBar = () => {
+  const { isSession, logout } = useUser()
+  const { userData } = useContext(UserContext)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const navigate = useNavigate()
-  const { isLogged, logout } = useUser()
-  const { logged } = useContext(UserContext)
+
+  const firstName = userData?.firstName
+  const lastName = userData?.lastName
 
   const handleMenuOpen = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -108,7 +111,7 @@ export const NavigationBar = () => {
           <ThemeToggle />
           <NavbarItem>
             <Link
-              className={`${isLogged ? 'hidden md:hidden' : 'hidden md:flex'} text-md text-warning`}
+              className={`${isSession ? 'hidden md:hidden' : 'hidden md:flex'} text-md text-warning`}
               to='/register'
             >
               Register
@@ -117,7 +120,7 @@ export const NavigationBar = () => {
           <NavbarItem>
             <Button
               onClick={() => navigate('/login')}
-              className={`${isLogged ? 'hidden md:hidden' : 'hidden sm:flex'}`}
+              className={`${isSession ? 'hidden md:hidden' : 'hidden sm:flex'}`}
               color='primary'
               variant='ghost'
               radius='full'
@@ -129,7 +132,7 @@ export const NavigationBar = () => {
             </Button>
           </NavbarItem>
           {
-            isLogged &&
+            isSession &&
               <NavbarItem>
                 <Dropdown
                   radius='md'
@@ -142,7 +145,7 @@ export const NavigationBar = () => {
                       color='primary'
                       startContent={<UserCircleIcon className='h-[24px]' />}
                     >
-                      {logged?.user_metadata.first_name || 'Guest'}
+                      {firstName}
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu
@@ -159,8 +162,8 @@ export const NavigationBar = () => {
                         textValue='profile'
                       >
                         <User
-                          name={logged?.user_metadata.first_name || ''}
-                          description={logged?.user_metadata.last_name || ''}
+                          name={firstName}
+                          description={lastName}
                           classNames={{
                             name: 'text-foreground text-md font-medium capitalize',
                             description: 'text-foreground text-sm capitalize'
@@ -279,7 +282,7 @@ export const NavigationBar = () => {
           </div>
 
           {
-            isLogged
+            isSession
               ? <div className='w-full flex flex-col gap-4 mb-7'>
                 <NavbarMenuItem>
                   <Button

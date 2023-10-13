@@ -1,6 +1,7 @@
 import { Button, Image } from '@nextui-org/react'
 import { TitleH1 } from '../components/TitleH1'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { hubHeroImage } from '../assets'
 
 export default function HubsPage () {
   return (
@@ -29,7 +30,7 @@ export default function HubsPage () {
           <Image
             removeWrapper
             className='w-full h-full object-cover'
-            src='../src/assets/hubsImages/hubs-hero-image.png'
+            src={hubHeroImage}
           />
         </div>
       </section>

@@ -5,10 +5,12 @@ import { supabase } from '../client/supabase'
 import { loginSession } from '../services/userSession'
 
 export function useUser () {
-  const { logged, setLogged } = useContext(UserContext)
+  const { sessionUser, setSessionUser, setUserData } = useContext(UserContext)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const [passwordChanged, setPasswordChanged] = useState(false)
+  const [requestSucess, setRequestSuccess] = useState(false)
 
   const login = useCallback(({ email, password }) => {
     setLoading(true)
@@ -19,26 +21,65 @@ export function useUser () {
           setLoading(false)
           setError(`${error.name}: ${error.message}`)
         } else if (data) {
-          const metadata = data.session.user
-          setLogged(metadata)
-          window.localStorage.setItem('session', JSON.stringify(metadata))
+          const { session } = data
+          window.sessionStorage.setItem('sb-pxbddlwjbyfnwqokieti-auth-token', JSON.stringify(session))
+          setSessionUser(session)
           setLoading(false)
           navigate('/')
         }
       })
-  }, [setLogged])
+  }, [setSessionUser])
 
   const logout = useCallback(() => {
     supabase.auth.signOut()
-    window.localStorage.removeItem('session')
-    setLogged(false)
+    window.localStorage.removeItem('sb-pxbddlwjbyfnwqokieti-auth-token')
+    window.sessionStorage.removeItem('sb-pxbddlwjbyfnwqokieti-auth-token')
+    setSessionUser(null)
+    setUserData(null)
     navigate('/')
-  }, [setLogged])
+  }, [setSessionUser])
+
+  const resetPassword = useCallback((email) => {
+    setLoading(true)
+    const requestRecoveryPassword = async () => {
+      const { data, error } = await supabase.auth
+        .resetPasswordForEmail(email, {
+          redirectTo: 'http://localhost:5173/reset-password'
+        })
+      if (error) {
+        setError(`There's an error: ${error.name}, ${error.message}`)
+      } else if (data) {
+        setRequestSuccess(true)
+      }
+    }
+    requestRecoveryPassword()
+    setLoading(false)
+  }, [setSessionUser])
+
+  const requestNewPassword = useCallback((password) => {
+    setLoading(true)
+    const setNewPassword = async () => {
+      const { data, error } = await supabase.auth
+        .updateUser({ password })
+
+      if (error) {
+        setError(`There's an error: ${error.name}, ${error.message}`)
+      } else if (data) {
+        setPasswordChanged(true)
+      }
+    }
+    setNewPassword()
+    setLoading(false)
+  }, [setSessionUser])
 
   return {
-    isLogged: Boolean(logged),
+    isSession: Boolean(sessionUser),
     login,
     logout,
+    resetPassword,
+    requestNewPassword,
+    requestSucess,
+    passwordChanged,
     loading,
     error
   }

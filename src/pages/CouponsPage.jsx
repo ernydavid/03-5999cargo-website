@@ -2,32 +2,55 @@ import { Link } from 'react-router-dom'
 import { TitleH1 } from '../components/TitleH1'
 import { CircularProgress } from '@nextui-org/react'
 import { PatternCardBackground } from '../assets'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/userContext'
 import { useUser } from '../hooks/useUser'
 import { CouponCard, Footer } from '../components'
 import { ArrowLink } from '../components/ArrowLink'
 import { PromotionCard } from '../components/PromotionCard'
 
-import couponsData from '../constants/coupons.json'
-import promotionsData from '../constants/promotions.json'
-
 export default function CouponsPage () {
-  const { logged } = useContext(UserContext)
-  const { isLogged } = useUser()
+  const { userData } = useContext(UserContext)
+  const { isSession } = useUser()
+  const [coupons, setCoupons] = useState([])
+  const [promotions, setPromotions] = useState([])
+  const [noCoupons, setNoCoupons] = useState(null)
+  const [noPromotions, setNoPromotions] = useState(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
+
+    fetch('./src/assets/coupons.json')
+      .then(res => {
+        if (!res.ok) {
+          setNoCoupons('Coupons are not availables')
+        } else {
+          res.json().then(data => {
+            setCoupons(data)
+          })
+        }
+      })
+
+    fetch('./src/assets/promotions.json')
+      .then(res => {
+        if (!res.ok) {
+          setNoPromotions('Promotions are not availables')
+        } else {
+          res.json().then(data => {
+            setPromotions(data)
+          })
+        }
+      })
   }, [])
 
-  const firstName = isLogged ? logged?.user_metadata.first_name.toLowerCase() : 'Guest'
-  const lastName = isLogged ? logged?.user_metadata.last_name.toLowerCase() : ''
+  const firstName = isSession ? userData?.firstName.toLowerCase() : 'Guest'
+  const lastName = isSession ? userData?.lastName.toLowerCase() : ''
 
   return (
     <div className='max-w-[1000px] p-4 m-auto flex flex-col justify-center items-center relative'>
 
       {
-        isLogged &&
+        isSession &&
           <div className='relative w-full min-h-[250px] overflow-hidden bg-[#06153F] rounded-t-xl flex flex-col p-4 text-white'>
             <PatternCardBackground />
             <div className='z-10 mt-6 px-4 flex flex-col sm:flex-row justify-center items-center gap-3'>
@@ -89,15 +112,17 @@ export default function CouponsPage () {
 
         <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
           {
-            couponsData.map(({ id, title, discountNumber, image }) => (
-              <CouponCard
-                id={id}
-                discountNumber={`${discountNumber}%`}
-                key={id}
-                content={title}
-                image={image}
-              />
-            ))
+            noCoupons
+              ? <p className='text-center'>{noCoupons}</p>
+              : coupons.map(({ id, title, discountNumber, image }) => (
+                <CouponCard
+                  id={id}
+                  discountNumber={`${discountNumber}%`}
+                  key={id}
+                  content={title}
+                  image={image}
+                />
+              ))
           }
 
         </div>
@@ -111,15 +136,17 @@ export default function CouponsPage () {
 
         <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
           {
-            promotionsData.map(({ id, title, levelPromotion, image }) => (
-              <PromotionCard
-                key={id}
-                id={id}
-                title={title}
-                image={image}
-                levelPromotion={levelPromotion}
-              />
-            ))
+            noPromotions
+              ? <p className='text-center'>{noPromotions}</p>
+              : promotions.map(({ id, title, levelPromotion, image }) => (
+                <PromotionCard
+                  key={id}
+                  id={id}
+                  title={title}
+                  image={image}
+                  levelPromotion={levelPromotion}
+                />
+              ))
           }
 
         </div>

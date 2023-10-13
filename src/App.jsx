@@ -13,6 +13,8 @@ const SettingsUserPage = lazy(() => import('./pages/SettingsUserPage'))
 const ConfirmedEmailPage = lazy(() => import('./pages/ConfirmedEmailPage'))
 const CouponsPage = lazy(() => import('./pages/CouponsPage'))
 const HubsPage = lazy(() => import('./pages/HubsPage'))
+const RecoverPasswordPage = lazy(() => import('./pages/RecoverPasswordPage'))
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 
 export default function App () {
   return (
@@ -31,6 +33,8 @@ export default function App () {
         <Route path='/coupons&promotions' index element={<CouponsPage />} />
         <Route path='/coupons&promotions/:couponID' index element={<CouponDetails />} />
         <Route path='/accountSettings' index element={<SettingsUserPage />} />
+        <Route path='/recoverAccount' index element={<RecoverPasswordPage />} />
+        <Route path='/reset-password' index element={<ResetPasswordPage />} />
         <Route path='*' element={<ErrorPage />} />
       </Route>
     </Routes>

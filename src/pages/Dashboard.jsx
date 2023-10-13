@@ -9,17 +9,17 @@ import { UserContext } from '../context/userContext'
 import { useUser } from '../hooks/useUser'
 
 export default function Dashboard () {
-  const { logged } = useContext(UserContext)
+  const { userData } = useContext(UserContext)
+  const { isSession } = useUser()
   const navigate = useNavigate()
-  const { isLogged } = useUser()
 
   useEffect(() => {
-    if (!isLogged) navigate('/')
+    if (!isSession) navigate('/login')
     window.scrollTo(0, 0)
   }, [navigate])
 
-  const firstName = logged?.user_metadata.first_name || ''
-  const lastName = logged?.user_metadata.last_name || ''
+  const firstName = userData?.firstName || 'Guest'
+  const lastName = userData?.lastName || 'User'
 
   return (
     <div className='w-full lg:max-w-[1000px] px-2 flex flex-col justify-center m-auto gap-6'>

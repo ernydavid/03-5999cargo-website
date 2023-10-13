@@ -9,6 +9,8 @@ import CouponsPage from './CouponsPage'
 import SettingsUserPage from './SettingsUserPage'
 import Layout from './Layout'
 import HubsPage from './HubsPage'
+import RecoverPasswordPage from './RecoverPasswordPage'
+import ResetPasswordPage from './ResetPasswordPage'
 
 export {
   HomePage,
@@ -21,5 +23,7 @@ export {
   CouponsPage,
   HubsPage,
   SettingsUserPage,
-  Layout
+  Layout,
+  RecoverPasswordPage,
+  ResetPasswordPage
 }

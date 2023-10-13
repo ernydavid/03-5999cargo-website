@@ -3,15 +3,21 @@ import { UserCircleIcon } from '@heroicons/react/24/solid'
 import { Accordion, AccordionItem, Avatar, Button } from '@nextui-org/react'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../hooks/useUser'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
+import { UserContext } from '../context/userContext'
 
 export default function SettingsUserPage () {
-  const { isLogged } = useUser()
+  const { userData } = useContext(UserContext)
+  const { isSession } = useUser()
   const navigate = useNavigate()
 
+  const firstName = userData?.firstName || 'Guest'
+  const lastName = userData?.lastName || 'User'
+  const userEmail = userData?.userEmail || 'example@example.com'
+
   useEffect(() => {
-    if (!isLogged) {
-      navigate('/')
+    if (!isSession) {
+      navigate('/login')
     }
   }, [])
 
@@ -32,9 +38,9 @@ export default function SettingsUserPage () {
             />
           </div>
           <div className='w-full flex flex-col justify-center items-center sm:items-start'>
-            <h1 className='text-2xl'>User Name</h1>
+            <h1 className='text-2xl'>{`${firstName} ${lastName}`}</h1>
             <h3 className='uppercase text-lg text-primary'>#CUW00001</h3>
-            <p className='text-sm text-foreground/70'>example@example.com</p>
+            <p className='text-sm text-foreground/70'>{userEmail}</p>
           </div>
         </div>
       </div>

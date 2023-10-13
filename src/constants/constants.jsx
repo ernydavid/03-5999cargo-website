@@ -1,4 +1,4 @@
-import { GlobeAmericasIcon, BoltIcon, TruckIcon, ChatBubbleLeftRightIcon, TrophyIcon, ShoppingCartIcon, HomeIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
+import { GlobeAmericasIcon, BoltIcon, TruckIcon, ChatBubbleLeftRightIcon, TrophyIcon, ShoppingCartIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
 
 export const NAV_LINKS = [
   {
@@ -25,38 +25,28 @@ export const SERVICES_LINKS = {
   href: '/services',
   servicesDescription: [
     {
-      id: 'transport-service',
-      title: 'Transport Service by Air or Sea',
-      href: '/services/transportation',
-      icon: <TrophyIcon className='h-5 text-primary-600' />
+      id: 'express-delivery',
+      title: 'Express Delivery',
+      href: '/services/express-delivery',
+      icon: <TrophyIcon className='h-10 text-foreground/70' />
     },
     {
       id: 'road-service',
-      title: 'Road Service of Small and Large Packages',
-      href: '/services/road',
-      icon: <TruckIcon className='h-5 text-primary-600' />
-
+      title: 'Road Service',
+      href: '/services/road-service',
+      icon: <TruckIcon className='h-10 text-foreground/70' />
     },
     {
       id: 'shop-drop-ship',
-      title: 'Shop, Drop & Ship',
-      href: '/services/shop&drop&ship',
-      icon: <ShoppingCartIcon className='h-5 text-primary-600' />
-
-    },
-    {
-      id: 'warehouse-service',
-      title: 'Warehouse Service',
-      href: '/services/warehouses',
-      icon: <HomeIcon className='h-5 text-primary-600' />
-
+      title: 'Shop & Ship',
+      href: '/services/shop-drop-ship',
+      icon: <ShoppingCartIcon className='h-10 text-foreground/70' />
     },
     {
       id: 'shopper-service',
-      title: 'Personal Shopper Service',
-      href: '/services/personal&shopper',
-      icon: <ShoppingBagIcon className='h-5 text-primary-600' />
-
+      title: 'Personal Shopper',
+      href: '/services/personal-shopper',
+      icon: <ShoppingBagIcon className='h-10 text-foreground/70' />
     }
   ]
 }

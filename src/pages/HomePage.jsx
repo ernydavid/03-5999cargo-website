@@ -1,78 +1,80 @@
 /* eslint-disable react/jsx-closing-tag-location */
-import { Button, Card, CardBody, CardFooter, CardHeader, Image } from '@nextui-org/react'
-import { Link, useNavigate } from 'react-router-dom'
-import { ArrowRightIcon } from '@heroicons/react/24/solid'
-import { HERO_CARD_SERVICES, SERVICES_LINKS } from '../constants/constants'
-import { cargoEmployee, coupon2, promotion1, worldMap } from '../assets'
+import { Button, Card, CardBody, CardHeader, Image, Tab, Tabs } from '@nextui-org/react'
+import { useNavigate } from 'react-router-dom'
+import { HERO_CARD_SERVICES } from '../constants/constants'
+import { coupon2, promotion1, worldMap } from '../assets'
 import { useUser } from '../hooks/useUser'
-import { Footer } from '../components'
+import { CouponCard, PromotionCard, Footer } from '../components'
 import { TitleH1 } from '../components/TitleH1'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 export default function HomePage () {
-  const { isLogged } = useUser()
+  const { isSession } = useUser()
   const navigate = useNavigate()
+  const [service, setService] = useState([])
+  const [selected, setSelected] = useState('express-delivery')
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
+
+    fetch('/assets/homePageData.json')
+      .then(response => {
+        if (!response.ok) {
+          setError(`Se ha encontrado un error: ${response.status}: ${response.statusText}`)
+        } else {
+          response.json()
+            .then(data => {
+              const { services } = data
+              setService(services)
+            })
+        }
+      })
   }, [])
 
+  useEffect(() => {
+    window.onbeforeunload = () => {
+      window.localStorage.removeItem('sb-pxbddlwjbyfnwqokieti-auth-token')
+    }
+  })
+
   return (
-    <main className='px-6 max-w-[1000px] m-auto'>
+    <main className='px-6 lg:px-2 max-w-[1000px] m-auto relative'>
       <section className='flex h-[85vh] flex-col md:flex-row justify-center items-center'>
         <div
           className='flex flex-col justify-center md:items-start items-center relative'
         >
-          {
-            (isLogged)
-              ? <TitleH1 starContent='Earn points for every' focusContent='shipment.' endContent='Send now and start earn points' className='text-4xl' />
-              : <TitleH1 starContent='Send packages around the world with a' focusContent='Smile.' endContent='Earn points for your shipments.' className='text-4xl' />
-          }
-          {
-            isLogged
-              ? <p
-                  className='text-foreground-600 md:text-start text-center py-4 px-6 md:px-0 text-base'
-                >
-                The new loyalty system allows you to get more benefits when using our shipping system. Learn how
-              </p>
-              : <p
-                  className='text-foreground-600 md:text-start text-center py-4 px-6 md:px-0 text-base'
-                >
-                We offer Express Delivery services around the world, Shop, Drop & Ship, Personal Shopper Service and more!. And i'ts not at all! You can earn many gifts by using our service!
-              </p>
-          }
-
-          {
-          isLogged
-            ? <Button
-                className='w-full max-w-[400px] md:w-[400px] mt-2 bg-gradient-to-br from-[#103A6A] to-[#032348] dark:from-[#4888d1] dark:to-[#084386] h-[48px] py-4 font-md text-base text-white'
-                color='primary'
-                radius='full'
-                variant='shadow'
-                endContent={
-                  <ArrowRightIcon
-                    className='h-[16px]'
-                  />
+          <TitleH1
+            starContent={isSession ? 'Earn points for every' : 'Send packages around the world with a'}
+            focusContent={isSession ? 'shipment.' : 'Smile.'}
+            endContent={isSession ? 'Send now and start earn points' : 'Earn points for your shipments.'}
+            className='text-4xl md:text-start text-center'
+          />
+          <p
+            className='text-foreground-600 md:text-start text-center py-4 px-6 md:px-0 text-base'
+          >
+            {
+                isSession
+                  ? 'The new loyalty system allows you to get more benefits when using our shipping system. Learn how'
+                  : 'We offer Express Delivery services around the world, Shop, Drop & Ship, Personal Shopper Service and more!. And it\'s not at all! You can earn many gifts by using our service!'
             }
-                onClick={() => { navigate('/coupons&promotions') }}
-              >
-              Explore all availables promotions
-            </Button>
-            : <Button
-                className='w-full max-w-[400px] md:w-[400px] mt-2 bg-gradient-to-br from-[#103A6A] to-[#032348] dark:from-[#4888d1] dark:to-[#084386] h-[48px] py-4 font-md text-base text-white'
-                color='primary'
-                radius='full'
-                variant='shadow'
-                endContent={
-                  <ArrowRightIcon
-                    className='h-[16px]'
-                  />
-                }
-                onClick={() => { navigate('/register') }}
-              >
-              Join us and get started now!
-            </Button>
-        }
+          </p>
+          <Button
+            className='mt-2 bg-gradient-to-br from-[#103A6A] to-[#032348] dark:from-[#4888d1] dark:to-[#084386] h-[48px] p-4 font-md text-base text-white'
+            color='primary'
+            radius='full'
+            variant='shadow'
+            endContent={
+              <ArrowRightIcon
+                className='h-[16px]'
+              />
+            }
+            onClick={() => { isSession ? navigate('/coupons&promotions') : navigate('/register') }}
+          >
+            {isSession ? 'Explore all availables promotions' : 'Join us and get started now!'}
+          </Button>
+
         </div>
 
         <div
@@ -81,10 +83,9 @@ export default function HomePage () {
           <img
             className='absolute md:relative top-0 left-[50%] translate-x-[-50%] opacity-20 object-cover md:h-[500px] md:object-left md:flex md:justify-center md:items-start'
             src={worldMap}
-            alt='world Map'
+            alt='hero Image of 5999Cargo'
           />
         </div>
-
       </section>
 
       <section
@@ -92,97 +93,123 @@ export default function HomePage () {
       >
         {
           HERO_CARD_SERVICES.map(({ id, title, content, href, icon }) => (
-            <Link
-              to={href}
+            <Card
               key={id}
+              className='bg-[#103A6A] p-2 h-full'
             >
-              <Card
-                className='bg-[#103A6A] p-2 h-full'
+              <CardHeader
+                className='flex gap-3 px-3 py-2'
               >
-                <CardHeader
-                  className='flex gap-3 px-3 py-2'
+                {icon}
+                <h3
+                  className='text-white text-base font-semibold'
                 >
-                  {icon}
-                  <h3
-                    className='text-white text-base font-semibold'
-                  >
-                    {title}
-                  </h3>
-                </CardHeader>
-                <CardBody
-                  className='px-4 py-2'
+                  {title}
+                </h3>
+              </CardHeader>
+              <CardBody
+                className='px-4 py-2'
+              >
+                <p
+                  className='text-white text-base font-normal'
                 >
-                  <p
-                    className='text-white text-base font-normal'
-                  >
-                    {content}
-                  </p>
-                </CardBody>
-              </Card>
-            </Link>
+                  {content}
+                </p>
+              </CardBody>
+            </Card>
           ))
         }
       </section>
 
       <section
-        className='relative z-10 flex flex-col md:grid md:grid-cols-2 gap-2 w-full justify-center items-center mt-24 lg:mt-56'
+        className='relative flex flex-col gap-2 w-full justify-center items-center md:items-start mt-24 lg:mt-40'
       >
         <div
           className='flex flex-col gap-4'
         >
-          <div className='inline-block text-left'>
-            <h1 className='tracking-tight text-4xl inline font-bold antialiased text-center'>
-              We offer the&nbsp;
-            </h1>
-            <h1 className='tracking-tight bg-gradient-to-bl from-sky-400 to-sky-800 text-4xl inline font-bold antialiased text-center bg-clip-text text-transparent'>
-              best service,&nbsp;
-            </h1>
-            <h1 className='tracking-tight text-4xl inline font-bold antialiased text-center'>
-              for you shipments.
-            </h1>
-          </div>
-          <div className='grid gap-3'>
-            {
-            SERVICES_LINKS.servicesDescription.map(({ id, title, href, icon }) => (
-              <Button
-                className='hover:bg-[#103A6A]'
-                radius='lg'
-                startContent={
-                   icon
-                }
-                color='primary'
-                variant='flat'
-                key={`link-to-${id}`}
-                as={Link}
-                to={href}
-              >
-                {title}
-              </Button>
-            ))
-          }
-          </div>
-        </div>
-        <div className='flex w-full h-[300px] md:w-[300px] lg:h-[400px] lg:w-[400px] m-auto md:rounded-full overflow-hidden justify-center md:items-center object-contain bg-background-700'>
-          <Image
-            src={cargoEmployee}
+          <TitleH1
+            starContent='We offer the'
+            focusContent='best service'
+            endContent='for your shipments.'
+            className='text-4xl'
           />
+
+          <div className='w-full flex flex-col'>
+            <Tabs
+              aria-label='Options'
+              selectedKey={selected}
+              variant='underlined'
+              className='p-0'
+              onSelectionChange={setSelected}
+              classNames={{
+                base: 'p-0',
+                tab: 'w-20 md:w-32 h-24',
+                cursor: 'bg-transparent',
+                tabContent: 'group-data-[selected=true]:text-primary'
+              }}
+            >
+              {error === null &&
+                service.map(({ id, title, content, imageURL, icon }) => (
+                  <Tab
+                    key={id}
+                    id={id}
+                    title={
+                      <div className='flex flex-col gap-2 justify-between items-center'>
+                        <svg
+                          fill={icon.fill}
+                          className={`${icon.className}`}
+                          stroke={icon.stroke}
+                          strokeWidth={icon.strokeWidth}
+                          viewBox={icon.viewBox}
+                        >
+                          <path
+                            d={icon.d}
+                            strokeLinecap={icon.strokeLinecap}
+                            strokeLinejoin={icon.strokeLinejoin}
+                          />
+                        </svg>
+                        <h2>{icon.label}</h2>
+                      </div>
+                  }
+                  >
+                    <Card className='w-full bg-background-800 md:h-[350px] sm:h-[470px] h-[550px] flex flex-col items-center justify-center md:flex-row p-0'>
+                      <CardHeader className='w-full md:w-auto md:h-full'>
+                        <div className='w-full h-full overflow-hidden rounded-2xl'>
+                          <Image
+                            isZoomed
+                            removeWrapper
+                            className='w-full md:w-[300px] h-[200px] md:h-full object-cover'
+                            src={imageURL}
+                            alt={`image for ${id}`}
+                          />
+                        </div>
+                      </CardHeader>
+                      <CardBody className='w-full flex flex-col gap-2 md:px-4'>
+                        <h2 className='text-lg text-primary'>{title}</h2>
+                        <div className='flex flex-col gap-3'>
+                          <p className='text-foreground/70 text-sm sm:text-base'>
+                            {content}
+                          </p>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </Tab>
+                ))}
+
+            </Tabs>
+          </div>
         </div>
       </section>
 
       <section className='relative z-10 flex flex-col md:grid md:grid-cols-2 gap-6 w-full justify-center items-center mt-24 lg:mt-56'>
 
         <div className='flex flex-col gap-3'>
-          <div className='inline-block text-left'>
-            <h1 className='tracking-tight text-4xl inline font-bold antialiased text-center'>
-              Explore all&nbsp;
-            </h1>
-            <h1 className='tracking-tight bg-gradient-to-bl from-sky-400 to-sky-800 text-4xl inline font-bold antialiased text-center bg-clip-text text-transparent'>
-              gifts & coupons,&nbsp;
-            </h1>
-            <h1 className='tracking-tight text-4xl inline font-bold antialiased text-center'>
-              for using our service.
-            </h1>
-          </div>
+          <TitleH1
+            starContent='Explore all'
+            focusContent='gifts & coupons'
+            endContent='for using our service.'
+            className='text-4xl'
+          />
           <Button
             variant='shadow'
             color='primary'
@@ -195,36 +222,16 @@ export default function HomePage () {
         </div>
 
         <div className='w-full grid grid-cols-2 gap-2'>
-          <Card className='h-[200px]'>
-            <CardHeader className='w-full absolute z-10 top-1 flex-col !items-start rounded-xl bg-primary/30'>
-              <p className='text-tiny text-white/60 uppercase font-bold'>15% Discount Coupon</p>
-              <h4 className='text-white font-medium text-large'>On every shipment</h4>
-            </CardHeader>
-            <Image
-              removeWrapper
-              alt='Card background'
-              className='z-0 w-full h-full object-cover'
-              src={coupon2}
-            />
-            <CardFooter className='absolute z-10 bottom-5 left-5 w-[80px] h-[80px] rounded-full flex items-center justify-center bg-primary/60'>
-              <span className='text-3xl text-white'>15%</span>
-            </CardFooter>
-          </Card>
-          <Card className='h-[200px]'>
-            <CardHeader className='w-full absolute z-10 top-1 flex-col !items-start rounded-xl bg-secondary/30'>
-              <p className='text-tiny text-white/60 uppercase font-bold'>Loyalty Promotion</p>
-              <h4 className='text-white font-medium text-large'>7 Days Travel Cruise</h4>
-            </CardHeader>
-            <Image
-              removeWrapper
-              alt='Card background'
-              className='z-0 w-full h-full object-cover'
-              src={promotion1}
-            />
-            <CardFooter className='absolute z-10 bottom-5 left-5 w-[80px] h-[80px] rounded-full flex items-center justify-center bg-secondary/60'>
-              <span className='text-xs text-center text-white uppercase'>ONLY GOLD & DIAMOND</span>
-            </CardFooter>
-          </Card>
+          <CouponCard
+            content='On every shipment'
+            discountNumber='15%'
+            image={coupon2}
+          />
+          <PromotionCard
+            levelPromotion='Gold & Diamond'
+            title='7 Days on Travel Cruise'
+            image={promotion1}
+          />
         </div>
 
         <div className='md:col-span-2 md:place-self-center'>
@@ -240,8 +247,8 @@ export default function HomePage () {
         </div>
 
       </section>
+
       <Footer />
     </main>
-
   )
 }
