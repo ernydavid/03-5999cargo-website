@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { lazy } from 'react'
 import { Layout } from './pages'
 import { CouponDetails } from './pages/CouponDetails'
+import { useUser } from './hooks/useUser'
 
 const LazyHomePage = lazy(() => import('./pages/HomePage'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -17,6 +18,8 @@ const RecoverPasswordPage = lazy(() => import('./pages/RecoverPasswordPage'))
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 
 export default function App () {
+  const { isSession } = useUser()
+
   return (
     <Routes>
       <Route
@@ -24,7 +27,8 @@ export default function App () {
       >
 
         <Route index element={<LazyHomePage />} />
-        <Route path='/dashboard' index element={<Dashboard />} />
+        {isSession && <Route path='/dashboard' index element={<Dashboard />} />}
+        {isSession && <Route path='/accountSettings' index element={<SettingsUserPage />} />}
         <Route path='/register' index element={<UserRegister />} />
         <Route path='/login' index element={<UserLogin />} />
         <Route path='/account' index element={<ConfirmedEmailPage />} />
@@ -32,7 +36,6 @@ export default function App () {
         <Route path='/services/loyaltySystem' index element={<LoyaltySystemPage />} />
         <Route path='/coupons&promotions' index element={<CouponsPage />} />
         <Route path='/coupons&promotions/:couponID' index element={<CouponDetails />} />
-        <Route path='/accountSettings' index element={<SettingsUserPage />} />
         <Route path='/recoverAccount' index element={<RecoverPasswordPage />} />
         <Route path='/reset-password' index element={<ResetPasswordPage />} />
         <Route path='*' element={<ErrorPage />} />

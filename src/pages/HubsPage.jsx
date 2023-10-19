@@ -34,6 +34,13 @@ export default function HubsPage () {
           />
         </div>
       </section>
+
+      <section>
+        <TitleH1
+          className='text-3xl mb-20'
+          starContent='Promotions by' focusContent='country'
+        />
+      </section>
     </main>
   )
 }

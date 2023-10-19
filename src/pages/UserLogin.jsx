@@ -20,11 +20,11 @@ export default function UserLogin () {
     resolver: yupResolver(schemaValidationLogin)
   })
   const navigate = useNavigate()
-  const { login, isLogged, loading, error } = useUser()
+  const { login, isSession, loading, error } = useUser()
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    if (isLogged) navigate('/')
+    if (isSession) navigate('/')
   }, [navigate])
 
   const onSubmit = (data) => {

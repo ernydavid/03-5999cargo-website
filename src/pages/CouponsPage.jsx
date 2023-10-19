@@ -20,7 +20,7 @@ export default function CouponsPage () {
   useEffect(() => {
     window.scrollTo(0, 0)
 
-    fetch('./src/assets/coupons.json')
+    fetch('/assets/coupons.json')
       .then(res => {
         if (!res.ok) {
           setNoCoupons('Coupons are not availables')
@@ -31,7 +31,7 @@ export default function CouponsPage () {
         }
       })
 
-    fetch('./src/assets/promotions.json')
+    fetch('/assets/promotions.json')
       .then(res => {
         if (!res.ok) {
           setNoPromotions('Promotions are not availables')

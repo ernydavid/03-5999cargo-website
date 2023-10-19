@@ -6,15 +6,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Footer } from '../components'
 import { useContext, useEffect } from 'react'
 import { UserContext } from '../context/userContext'
-import { useUser } from '../hooks/useUser'
 
 export default function Dashboard () {
   const { userData } = useContext(UserContext)
-  const { isSession } = useUser()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!isSession) navigate('/login')
     window.scrollTo(0, 0)
   }, [navigate])
 

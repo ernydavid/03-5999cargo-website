@@ -34,7 +34,7 @@ export default function SettingsUserPage () {
                 icon: 'text-white',
                 name: 'text-lg text-white font-semibold uppercase'
               }}
-              name='User'
+              name={firstName}
             />
           </div>
           <div className='w-full flex flex-col justify-center items-center sm:items-start'>
@@ -68,7 +68,7 @@ export default function SettingsUserPage () {
               <p className='flex'>
                 Complete your account information
               </p>
-        }
+            }
             title='Account Details'
           >
             <div className='w-full p-2 flex flex-col items-center justify-start gap-2'>

@@ -55,9 +55,9 @@ export default function HomePage () {
             className='text-foreground-600 md:text-start text-center py-4 px-6 md:px-0 text-base'
           >
             {
-                isSession
-                  ? 'The new loyalty system allows you to get more benefits when using our shipping system. Learn how'
-                  : 'We offer Express Delivery services around the world, Shop, Drop & Ship, Personal Shopper Service and more!. And it\'s not at all! You can earn many gifts by using our service!'
+              isSession
+                ? 'The new loyalty system allows you to get more benefits when using our shipping system. Learn how'
+                : 'We offer Express Delivery services around the world, Shop, Drop & Ship, Personal Shopper Service and more! And it\'s not at all! You can earn many gifts by using our service!'
             }
           </p>
           <Button
@@ -170,7 +170,7 @@ export default function HomePage () {
                         </svg>
                         <h2>{icon.label}</h2>
                       </div>
-                  }
+                    }
                   >
                     <Card className='w-full bg-background-800 md:h-[350px] sm:h-[470px] h-[550px] flex flex-col items-center justify-center md:flex-row p-0'>
                       <CardHeader className='w-full md:w-auto md:h-full'>

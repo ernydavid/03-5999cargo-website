@@ -1,6 +1,7 @@
 export function Logo ({ width, height, className, isDark }) {
   return (
     <svg
+      className={className}
       width={width}
       height={height}
       viewBox='0 0 136 36'
