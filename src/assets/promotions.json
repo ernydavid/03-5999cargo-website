@@ -1,0 +1,38 @@
+[
+  {
+    "id": "promotion-1",
+    "title": "7 days Carnival Cruise",
+    "levelPromotion": "Gold & diamond",
+    "image": "/assets/promotionsImages/promotion-1.png"
+  },
+  {
+    "id": "promotion-2",
+    "title": "3 days Barranquilla Tour",
+    "levelPromotion": "Silver, Gold & Diamond",
+    "image": "/assets/promotionsImages/promotion-2.png"
+  },
+  {
+    "id": "promotion-3",
+    "title": "7 days Royal Caribbean Tour",
+    "levelPromotion": "Diamond",
+    "image": "/assets/promotionsImages/promotion-1.png"
+  },
+  {
+    "id": "promotion-4",
+    "title": "7 days Punta Cana Resort",
+    "levelPromotion": "Gold & Diamond",
+    "image": "/assets/promotionsImages/promotion-2.png"
+  },
+  {
+    "id": "promotion-5",
+    "title": "4 days Cancun Tour",
+    "levelPromotion": "Diamond",
+    "image": "/assets/promotionsImages/promotion-2.png"
+  },
+  {
+    "id": "promotion-6",
+    "title": "7 days Carnival Tour",
+    "levelPromotion": "Gold",
+    "image": "/assets/promotionsImages/promotion-1.png"
+  }
+]

@@ -1,9 +1,23 @@
-import { Accordion, AccordionItem, Avatar, Button, Card, CardBody, CardHeader, Divider, Image, Link, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
-import { ACCOUNT_MENU_OPT, CARD_CONTENT, INFO_USER_LP } from '../constants/constants'
+import { Accordion, AccordionItem, Avatar, Button, Card, CardBody, CardHeader, Divider, Image, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
+import { ACCOUNT_MENU_LINKS, CARD_CONTENT, INFO_USER_LP } from '../constants/constants'
 import { StarIcon, ChevronRightIcon, ArchiveBoxIcon } from '@heroicons/react/24/solid'
-import { coupon1, coupon2, loyaltyImage, promotion1, promotion2 } from '../assets'
+import { PatternCardBackground, coupon1, coupon2, loyaltyImage, promotion1, promotion2 } from '../assets'
+import { Link, useNavigate } from 'react-router-dom'
+import { Footer } from '../components'
+import { useContext, useEffect } from 'react'
+import { UserContext } from '../context/userContext'
 
-export function Hero () {
+export default function Dashboard () {
+  const { userData } = useContext(UserContext)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [navigate])
+
+  const firstName = userData?.firstName || 'Guest'
+  const lastName = userData?.lastName || 'User'
+
   return (
     <div className='w-full lg:max-w-[1000px] px-2 flex flex-col justify-center m-auto gap-6'>
       <header
@@ -36,10 +50,11 @@ export function Hero () {
           }}
         >
           <AccordionItem
+            classNames={{ subtitle: 'text-xs font-semibold uppercase' }}
             key='user-account-menu'
-            aria-label='Germaine Martina'
+            aria-label={`${firstName} ${lastName}`}
             title='Account Manager Menu'
-            subtitle='GERMAINE MARTINA'
+            subtitle={`${firstName} ${lastName}`}
             startContent={
               <Avatar
                 className='md:h-[36px] md:w-[36px]'
@@ -52,7 +67,7 @@ export function Hero () {
           >
             <ul>
               {
-                ACCOUNT_MENU_OPT.map(({ id, title, href }) => (
+                ACCOUNT_MENU_LINKS.map(({ id, title, href }) => (
                   <li
                     key={id}
                     className='py-2'
@@ -60,7 +75,7 @@ export function Hero () {
                     <Link
                       className='text-foreground'
                       aria-label={`link-${id}`}
-                      href={href}
+                      to={href}
                     >
                       {title}
                     </Link>
@@ -77,9 +92,12 @@ export function Hero () {
         <Card
           className='bg-background-400'
         >
-          <CardHeader className='w-full h-[140px] px-6 py-3 flex-col justify-center items-start gap-4 bg-card-pattern bg-top bg-auto bg-repeat-x'>
-            <h2 className='text-2xl leading-4 font-semibold text-white'>Germaine Martina</h2>
-            <div className='text-white'>
+          <CardHeader className='w-full h-[140px] px-6 py-3 flex-col justify-center items-start gap-4 bg-top bg-[#06153F] bg-auto bg-repeat-x relative overflow-hidden'>
+            <PatternCardBackground />
+            <h2 className='text-2xl leading-4 font-semibold text-white capitalize z-10'>
+              {`${firstName} ${lastName}`}
+            </h2>
+            <div className='text-white z-10'>
               <p className='font-medium'>Membership Basic®</p>
               <p>Card Nº XXXX XXXX XXXX 9788</p>
             </div>
@@ -92,7 +110,7 @@ export function Hero () {
                   <h2 className='text-2xl font-semibold'>Loyalty Points</h2>
                 </div>
                 <div className='flex flex-col items-end'>
-                  <h2 className='text-3xl font-semibold'>650</h2>
+                  <h2 className='text-3xl font-semibold'>0</h2>
                   <small className='font-semibold'>points</small>
                 </div>
               </div>
@@ -103,7 +121,7 @@ export function Hero () {
                   <small className='font-semibold'>Your category status & points</small>
                 </div>
                 <div className='flex flex-col items-end'>
-                  <h2 className='text-3xl font-semibold'>650</h2>
+                  <h2 className='text-3xl font-semibold'>0</h2>
                   <small className='font-semibold'>points</small>
                 </div>
               </div>
@@ -132,7 +150,7 @@ export function Hero () {
                     >
                       <PopoverTrigger>
                         <Avatar
-                          className='w-[20px] h-[20px] absolute bottom-[10%] left-[50%] z-30 -translate-x-[50%]'
+                          className='w-[20px] h-[20px] absolute bottom-[0] left-[50%] z-30 -translate-x-[50%]'
                           as='button'
                           isBordered
                           color='primary'
@@ -142,8 +160,8 @@ export function Hero () {
                       <PopoverContent className='p-1'>
                         {(titleProps) => (
                           <div className='px-1 py-2'>
-                            <h3 className='text-small font-bold' {...titleProps}>
-                              Germaine Martina
+                            <h3 className='text-small font-bold capitalize' {...titleProps}>
+                              {`${firstName} ${lastName}`}
                             </h3>
                             <div className='text-tiny'>This is your progress level</div>
                           </div>
@@ -163,10 +181,9 @@ export function Hero () {
               </div>
             </div>
             <Link
-              showAnchorIcon
-              className='w-full flex justify-end text-tiny text-right'
-              href={ACCOUNT_MENU_OPT[3].href}
-            >Get more points
+              className='w-full flex gap-2 items-center justify-end text-tiny text-right'
+              to={ACCOUNT_MENU_LINKS[2].href}
+            >Get more points <ChevronRightIcon className='h-[15px]' />
             </Link>
           </CardBody>
         </Card>
@@ -174,36 +191,40 @@ export function Hero () {
 
       <section>
         <Card
-          className='bg-background-400'
+          className='bg-background-400 flex flex-col md:flex-row'
         >
-          <CardHeader className='w-full p-0 md:py-8 md:px-[100px] flex-col items-start md:items-center'>
-            <div
-              className='w-full overflow-hidden'
-            >
-              <Image
-                isZoomed
-                alt='Card background'
-                src={loyaltyImage}
-                className='h-[400px] w-[700px] object-top md:h-[600px]'
-              />
-            </div>
-          </CardHeader>
-          <CardBody className='w-full py-4 md:flex md:flex-col md:items-center'>
-            <p className='text-md font-bold'>How’s works the Loyalty points system?</p>
-            <ul className='px-4 py-2 md:px-[100px]'>
-              {
+          <div>
+            <CardHeader className='w-full p-0'>
+              <div
+                className='w-full h-[300px] overflow-hidden'
+              >
+                <Image
+                  isZoomed
+                  alt='Card background'
+                  src={loyaltyImage}
+                  className='h-[300px] w-[700px] object-top'
+                />
+              </div>
+            </CardHeader>
+          </div>
+          <div>
+            <CardBody className='w-full py-4 flex items-center md:flex-col md:items-start'>
+              <p className='text-md md:text-lg font-bold'>How’s works the Loyalty points system?</p>
+              <ul className='px-4 py-2'>
+                {
                 CARD_CONTENT.map(({ id, text }) => (
                   <li
                     key={id}
-                    className='text-default-500 text-small list-disc'
+                    className='text-default-500 text-small md:text-medium list-disc'
                   >
                     {text}
                   </li>
                 ))
               }
-            </ul>
+              </ul>
 
-          </CardBody>
+            </CardBody>
+          </div>
         </Card>
       </section>
 
@@ -213,10 +234,8 @@ export function Hero () {
         <div className='flex justify-between items-center'>
           <h1 className='text-2xl'>Recent Activity</h1>
           <Link
-            className='text-small'
-            showAnchorIcon
-            anchorIcon={<ChevronRightIcon className='h-[16px]' />}
-          >See all activitys
+            className='flex items-center gap-2 text-small'
+          >See all activitys <ChevronRightIcon className='h-[15px]' />
           </Link>
         </div>
 
@@ -228,14 +247,14 @@ export function Hero () {
             <CardBody
               className='p-0 overflow-hidden flex flex-row justify-start items-center gap-6'
             >
-              <div className='w-[80px] h-[80px] md:h-[100px] flex justify-center items-center bg-secondary'>
+              <div className='w-[80px] h-[80px] md:h-[100px] flex justify-center items-center bg-primary'>
                 <ArchiveBoxIcon className='h-[28px] text-white' />
               </div>
               <div className='flex flex-grow justify-between items-center gap-5'>
                 <div className='flex flex-col justify-center items-start'>
                   <p className='text-small text-default-500'>18 Sept 2023</p>
                   <h3 className='text-lg'>Package sent to Curacao</h3>
-                  <p className='text-small text-secondary-400'>Earned points: <b>3</b> </p>
+                  <p className='text-small text-primary-400'>Earned points: <b>3</b> </p>
                 </div>
                 <div className='w-[30px]'>
                   <ChevronRightIcon className='h-[18px]' />
@@ -250,14 +269,14 @@ export function Hero () {
             <CardBody
               className='p-0 overflow-hidden flex flex-row justify-start items-center gap-6'
             >
-              <div className='w-[80px] h-[80px] md:h-[100px] flex justify-center items-center bg-secondary'>
+              <div className='w-[80px] h-[80px] md:h-[100px] flex justify-center items-center bg-primary'>
                 <ArchiveBoxIcon className='h-[28px] text-white' />
               </div>
               <div className='flex flex-grow justify-between items-center gap-5'>
                 <div className='flex flex-col justify-center items-start'>
                   <p className='text-small text-default-500'>10 Sept 2023</p>
                   <h3 className='text-lg'>Package sent to Bonaire</h3>
-                  <p className='text-small text-secondary-400'>Earned points: <b>5</b> </p>
+                  <p className='text-small text-primary-400'>Earned points: <b>5</b> </p>
                 </div>
                 <div className='w-[30px]'>
                   <ChevronRightIcon className='h-[18px]' />
@@ -272,14 +291,14 @@ export function Hero () {
             <CardBody
               className='p-0 overflow-hidden flex flex-row justify-start items-center gap-6'
             >
-              <div className='w-[80px] h-[80px] md:h-[100px] flex justify-center items-center bg-secondary'>
+              <div className='w-[80px] h-[80px] md:h-[100px] flex justify-center items-center bg-primary'>
                 <ArchiveBoxIcon className='h-[28px] text-white' />
               </div>
               <div className='flex flex-grow justify-between items-center gap-5'>
                 <div className='flex flex-col justify-center items-start'>
                   <p className='text-small text-default-500'>05 Sept 2023</p>
                   <h3 className='text-lg'>Package sent to Curacao</h3>
-                  <p className='text-small text-secondary-400'>Earned points: <b>2</b> </p>
+                  <p className='text-small text-primary-400'>Earned points: <b>2</b> </p>
                 </div>
                 <div className='w-[30px]'>
                   <ChevronRightIcon className='h-[18px]' />
@@ -297,8 +316,6 @@ export function Hero () {
           <h1 className='text-2xl'>Available Coupons</h1>
           <Link
             className='text-small'
-            showAnchorIcon
-            anchorIcon={<ChevronRightIcon className='h-[16px]' />}
           >See all
           </Link>
         </div>
@@ -315,7 +332,7 @@ export function Hero () {
             />
 
             <div
-              className='w-[80px] h-[80px] rounded-full bg-secondary-400/80 absolute bottom-3 left-3 z-10 flex justify-center items-center pointer-events-none'
+              className='w-[80px] h-[80px] rounded-full bg-primary-400/80 absolute bottom-3 left-3 z-10 flex justify-center items-center pointer-events-none'
             >
               <span className='text-3xl font-semibold text-white'>15%</span>
             </div>
@@ -361,7 +378,7 @@ export function Hero () {
             />
 
             <div
-              className='w-[80px] h-[80px] rounded-full bg-secondary-400/80 absolute bottom-3 left-3 z-10 flex justify-center items-center pointer-events-none'
+              className='w-[80px] h-[80px] rounded-full bg-primary-400/80 absolute bottom-3 left-3 z-10 flex justify-center items-center pointer-events-none'
             >
               <span className='text-3xl font-semibold text-white'>20%</span>
             </div>
@@ -406,8 +423,6 @@ export function Hero () {
           <h1 className='text-2xl'>Loyalty Promotions</h1>
           <Link
             className='text-small'
-            showAnchorIcon
-            anchorIcon={<ChevronRightIcon className='h-[16px]' />}
           >See all
           </Link>
         </div>
@@ -518,15 +533,7 @@ export function Hero () {
         </Card>
       </section>
 
-      <footer className='py-10'>
-        <div className='text-center text-neutral-400 text-xs font-medium leading-[19px]'>©2023 5999Cargo Company<br />
-          ®All rights reserved<br />
-          www.5999cargo.com<br />
-          Contact<br />
-          Hubs<br />
-          About Us
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   )

@@ -24,11 +24,11 @@ const ICONS = [
 ]
 
 export const ThemeToggle = ({ className }) => {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') ? localStorage.getItem('theme') : 'system')
+  const [theme, setTheme] = useState(window.localStorage.getItem('theme') ? window.localStorage.getItem('theme') : 'system')
 
   useEffect(() => {
     function onWindowMatch () {
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && DEFAULT_THEME.matches)) {
+      if (window.localStorage.theme === 'dark' || (!('theme' in window.localStorage) && DEFAULT_THEME.matches)) {
         DOCUMENT.classList.add('dark')
       } else {
         DOCUMENT.classList.remove('dark')
@@ -37,20 +37,20 @@ export const ThemeToggle = ({ className }) => {
     switch (theme) {
       case 'dark':
         DOCUMENT.classList.add('dark')
-        localStorage.setItem('theme', 'dark')
+        window.localStorage.setItem('theme', 'dark')
         break
       case 'light':
         DOCUMENT.classList.remove('dark')
-        localStorage.theme = 'light'
+        window.localStorage.theme = 'light'
         break
       default:
-        localStorage.removeItem('theme')
+        window.localStorage.removeItem('theme')
         onWindowMatch()
         break
     }
 
     DEFAULT_THEME.addEventListener('change', (ev) => {
-      if (!(localStorage.getItem('theme'))) {
+      if (!(window.localStorage.getItem('theme'))) {
         ev.matches ? DOCUMENT.classList.add('dark') : DOCUMENT.classList.remove('dark')
       }
     })
@@ -58,12 +58,12 @@ export const ThemeToggle = ({ className }) => {
 
   return (
     <div
-      className={`flex gap-1 items-center ${className}`}
+      className={`flex gap-1 items-center justify-end ${className}`}
     >
       {
         ICONS.map(({ id, style, text }) => (
           <button
-            className={`hover:text-primary-200 ${theme === text ? 'text-secondary' : 'text-secondary-200'} last-of-type:md:flex last-of-type:hidden`}
+            className={`hover:text-primary-900 ${theme === text ? 'text-primary-700' : 'text-primary-400'} last-of-type:md:flex last-of-type:hidden`}
             key={id}
             title={text}
             onClick={() => setTheme(text)}

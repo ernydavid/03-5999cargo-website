@@ -1,0 +1,38 @@
+[
+  {
+    "id": "coupon-1",
+    "title": "Discount on every Sea Shipment",
+    "discountNumber": 10,
+    "image": "/assets/couponsImages/coupon-1.png"
+  },
+  {
+    "id": "coupon-2",
+    "title": "Discount on every Air Shipment",
+    "discountNumber": 10,
+    "image": "/assets/couponsImages/coupon-2.png"
+  },
+  {
+    "id": "coupon-3",
+    "title": "Discount on Sea Shipment from 100kg to up!",
+    "discountNumber": 20,
+    "image": "/assets/couponsImages/coupon-1.png"
+  },
+  {
+    "id": "coupon-4",
+    "title": "Discount on Air Shipment from 50kg to up!",
+    "discountNumber": 25,
+    "image": "/assets/couponsImages/coupon-2.png"
+  },
+  {
+    "id": "coupon-5",
+    "title": "Discount on Sea Shipment",
+    "discountNumber": 20,
+    "image": "/assets/couponsImages/coupon-1.png"
+  },
+  {
+    "id": "coupon-6",
+    "title": "Discount on every Shipment",
+    "discountNumber": 10,
+    "image": "/assets/couponsImages/coupon-1.png"
+  }
+]
