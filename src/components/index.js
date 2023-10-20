@@ -5,6 +5,7 @@ import { NewUserTerms } from './NewUserTerms'
 import { Footer } from './Footer'
 import { CouponCard } from './CouponCard'
 import { PromotionCard } from './PromotionCard'
+import { NotificationModal } from './NotificationModal'
 
 export {
   Logo,
@@ -13,5 +14,6 @@ export {
   NewUserTerms,
   Footer,
   CouponCard,
-  PromotionCard
+  PromotionCard,
+  NotificationModal
 }

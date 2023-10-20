@@ -8,7 +8,7 @@ import { UserContext } from '../context/userContext'
 
 export default function SettingsUserPage () {
   const { userData } = useContext(UserContext)
-  const { isSession } = useUser()
+  const { isSession, isDataComplete, validateUserData } = useUser()
   const navigate = useNavigate()
 
   const firstName = userData?.firstName || 'Guest'
@@ -19,6 +19,7 @@ export default function SettingsUserPage () {
     if (!isSession) {
       navigate('/login')
     }
+    validateUserData()
   }, [])
 
   return (
@@ -39,8 +40,8 @@ export default function SettingsUserPage () {
           </div>
           <div className='w-full flex flex-col justify-center items-center sm:items-start'>
             <h1 className='text-2xl'>{`${firstName} ${lastName}`}</h1>
-            <h3 className='uppercase text-lg text-primary'>#CUW00001</h3>
             <p className='text-sm text-foreground/70'>{userEmail}</p>
+            <p className='uppercase text-lg text-primary'>#CUW00001</p>
           </div>
         </div>
       </div>
@@ -65,8 +66,12 @@ export default function SettingsUserPage () {
             aria-label='Account Details'
             startContent={<UserCircleIcon className='text-primary h-7' />}
             subtitle={
-              <p className='flex'>
-                Complete your account information
+              <p className={`${isDataComplete === false ? 'text-danger' : 'text-foreground'}`}>
+                {
+                  isDataComplete === false
+                    ? 'Complete your account'
+                    : 'Show account details'
+                }
               </p>
             }
             title='Account Details'
@@ -74,10 +79,14 @@ export default function SettingsUserPage () {
             <div className='w-full p-2 flex flex-col items-center justify-start gap-2'>
               <Button
                 className='w-full'
-                color='primary'
+                color={isDataComplete === false ? 'danger' : 'primary'}
                 variant='flat'
               >
-                View your profile data
+                {
+                  isDataComplete === false
+                    ? 'Complete your account data'
+                    : 'View your account data'
+                }
               </Button>
 
             </div>

@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { HERO_CARD_SERVICES } from '../constants/constants'
 import { coupon2, promotion1, worldMap } from '../assets'
 import { useUser } from '../hooks/useUser'
-import { CouponCard, PromotionCard, Footer } from '../components'
+import { CouponCard, PromotionCard, Footer, NotificationModal } from '../components'
 import { TitleH1 } from '../components/TitleH1'
 import { useEffect, useState } from 'react'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 export default function HomePage () {
-  const { isSession } = useUser()
+  const { isSession, isDataComplete, validateUserData } = useUser()
   const navigate = useNavigate()
   const [service, setService] = useState([])
   const [selected, setSelected] = useState('express-delivery')
@@ -18,7 +18,6 @@ export default function HomePage () {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-
     fetch('/assets/homePageData.json')
       .then(response => {
         if (!response.ok) {
@@ -31,16 +30,16 @@ export default function HomePage () {
             })
         }
       })
+    validateUserData()
   }, [])
-
-  useEffect(() => {
-    window.onbeforeunload = () => {
-      window.localStorage.removeItem('sb-pxbddlwjbyfnwqokieti-auth-token')
-    }
-  })
 
   return (
     <main className='px-6 lg:px-2 max-w-[1000px] m-auto relative'>
+      {isDataComplete === false &&
+        <NotificationModal
+          message='Your profile data is not complete. Please go to settings.'
+          title='Complete your account'
+        />}
       <section className='flex h-[85vh] flex-col md:flex-row justify-center items-center'>
         <div
           className='flex flex-col justify-center md:items-start items-center relative'
@@ -78,7 +77,7 @@ export default function HomePage () {
         </div>
 
         <div
-          className='absolute w-full top-[150px] left-[50%] px-2 translate-x-[-50%] -z-10 md:relative md:top-0 md:left-0  md:translate-x-0'
+          className='absolute w-full top-[150px] left-[50%] px-2 translate-x-[-50%] -z-10 md:relative md:top-0 md:left-0  md:translate-x-0 md:overflow-hidden'
         >
           <img
             className='absolute md:relative top-0 left-[50%] translate-x-[-50%] opacity-20 object-cover md:h-[500px] md:object-left md:flex md:justify-center md:items-start'

@@ -11,6 +11,7 @@ export function useUser () {
   const navigate = useNavigate()
   const [passwordChanged, setPasswordChanged] = useState(false)
   const [requestSucess, setRequestSuccess] = useState(false)
+  const [isDataComplete, setIsDataComplete] = useState(null)
 
   const login = useCallback(({ email, password }) => {
     setLoading(true)
@@ -72,12 +73,34 @@ export function useUser () {
     setLoading(false)
   }, [setSessionUser])
 
+  const validateUserData = useCallback(() => {
+    const isUserDataComplete = async () => {
+      const { user } = sessionUser
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('is_data_complete')
+        .eq('id', user.id)
+        .single()
+
+      if (error) {
+        console.log(`An Error has encounter: ${error.message}`)
+      }
+      if (data) {
+        setIsDataComplete(data.is_data_complete)
+      }
+    }
+    isUserDataComplete()
+  }, [setSessionUser])
+
   return {
     isSession: Boolean(sessionUser),
     login,
     logout,
     resetPassword,
     requestNewPassword,
+    validateUserData,
+    isDataComplete,
     requestSucess,
     passwordChanged,
     loading,
