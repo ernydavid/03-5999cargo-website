@@ -1,6 +1,6 @@
 import { CreditCardIcon, DocumentCheckIcon, DocumentTextIcon, LifebuoyIcon, MapIcon, ShieldExclamationIcon } from '@heroicons/react/24/outline'
 import { UserCircleIcon } from '@heroicons/react/24/solid'
-import { Accordion, AccordionItem, Avatar, Button } from '@nextui-org/react'
+import { Accordion, AccordionItem, Avatar, Button, Input } from '@nextui-org/react'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../hooks/useUser'
 import { useContext, useEffect } from 'react'
@@ -8,7 +8,7 @@ import { UserContext } from '../context/userContext'
 
 export default function SettingsUserPage () {
   const { userData } = useContext(UserContext)
-  const { isSession, isDataComplete, validateUserData } = useUser()
+  const { isSession, isDataComplete, validateUserData, getDataFromUser, profileUser } = useUser()
   const navigate = useNavigate()
 
   const firstName = userData?.firstName || 'Guest'
@@ -65,6 +65,7 @@ export default function SettingsUserPage () {
             key='1'
             aria-label='Account Details'
             startContent={<UserCircleIcon className='text-primary h-7' />}
+            title='Account Details'
             subtitle={
               <p className={`${isDataComplete === false ? 'text-danger' : 'text-foreground'}`}>
                 {
@@ -74,10 +75,10 @@ export default function SettingsUserPage () {
                 }
               </p>
             }
-            title='Account Details'
           >
             <div className='w-full p-2 flex flex-col items-center justify-start gap-2'>
               <Button
+                onPress={getDataFromUser}
                 className='w-full'
                 color={isDataComplete === false ? 'danger' : 'primary'}
                 variant='flat'
@@ -88,6 +89,87 @@ export default function SettingsUserPage () {
                     : 'View your account data'
                 }
               </Button>
+
+              {profileUser !== null &&
+                <div className='w-full grid grid-cols-2 gap-2'>
+                  <Input
+                    size='sm'
+                    label='First Name'
+                    color='primary'
+                    variant='flat'
+                    value={profileUser.first_name || ''}
+                  />
+                  <Input
+                    size='sm'
+                    label='Last Name'
+                    color='primary'
+                    variant='flat'
+                    value={profileUser.last_name || ''}
+                  />
+                  <Input
+                    size='sm'
+                    label='Document ID'
+                    color='primary'
+                    variant='flat'
+                    value={profileUser.document_id || ''}
+                  />
+                  <Input
+                    size='sm'
+                    label='City / Province'
+                    color='primary'
+                    variant='flat'
+                    value={profileUser.city || ''}
+                  />
+                  <Input
+                    className='col-span-2'
+                    size='sm'
+                    label='Address'
+                    color='primary'
+                    variant='flat'
+                    value={profileUser.address || ''}
+                  />
+                  <Input
+                    size='sm'
+                    label='Country'
+                    color='primary'
+                    variant='flat'
+                    value={profileUser.country || ''}
+                  />
+                  <Input
+                    size='sm'
+                    label='Zip Code'
+                    color='primary'
+                    variant='flat'
+                    value={profileUser.zip_code || ''}
+                  />
+                  <Input
+                    size='sm'
+                    label='Mobile Phone'
+                    color='primary'
+                    variant='flat'
+                    value={profileUser.mobile_phone || ''}
+                  />
+                  <Input
+                    size='sm'
+                    label='Second Phone'
+                    color='primary'
+                    variant='flat'
+                    value={profileUser.second_phone || ''}
+                  />
+                  <div className='w-full flex items-center justify-end col-span-2 gap-3'>
+                    <Button
+                      color='primary'
+                    >
+                      Save Data
+                    </Button>
+                    <Button
+                      color='danger'
+                      variant='flat'
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>}
 
             </div>
           </AccordionItem>

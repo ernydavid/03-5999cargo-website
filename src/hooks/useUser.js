@@ -12,6 +12,7 @@ export function useUser () {
   const [passwordChanged, setPasswordChanged] = useState(false)
   const [requestSucess, setRequestSuccess] = useState(false)
   const [isDataComplete, setIsDataComplete] = useState(null)
+  const [profileUser, setProfileUser] = useState(null)
 
   const login = useCallback(({ email, password }) => {
     setLoading(true)
@@ -93,16 +94,38 @@ export function useUser () {
     isUserDataComplete()
   }, [setSessionUser])
 
+  const getDataFromUser = useCallback(() => {
+    const { user } = sessionUser
+
+    const getUserData = async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, document_id, city, country, address, zip_code, mobile_phone, second_phone')
+        .eq('id', user.id)
+        .single()
+
+      if (error) {
+        console.log(error)
+      }
+      if (data) {
+        setProfileUser({ ...data })
+      }
+    }
+    getUserData()
+  }, [setSessionUser])
+
   return {
     isSession: Boolean(sessionUser),
     login,
     logout,
     resetPassword,
+    getDataFromUser,
     requestNewPassword,
     validateUserData,
     isDataComplete,
     requestSucess,
     passwordChanged,
+    profileUser,
     loading,
     error
   }
