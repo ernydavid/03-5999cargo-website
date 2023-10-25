@@ -8,29 +8,18 @@ import { CouponCard, PromotionCard, Footer, NotificationModal } from '../compone
 import { TitleH1 } from '../components/TitleH1'
 import { useEffect, useState } from 'react'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import { services } from '../json/homePageData.json'
 
 export default function HomePage () {
   const { isSession, isDataComplete, validateUserData } = useUser()
   const navigate = useNavigate()
-  const [service, setService] = useState([])
   const [selected, setSelected] = useState('express-delivery')
-  const [error, setError] = useState(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    fetch('/assets/homePageData.json')
-      .then(response => {
-        if (!response.ok) {
-          setError(`Se ha encontrado un error: ${response.status}: ${response.statusText}`)
-        } else {
-          response.json()
-            .then(data => {
-              const { services } = data
-              setService(services)
-            })
-        }
-      })
-    validateUserData()
+    if (isSession) {
+      validateUserData()
+    }
   }, [])
 
   return (
@@ -147,53 +136,52 @@ export default function HomePage () {
                 tabContent: 'group-data-[selected=true]:text-primary'
               }}
             >
-              {error === null &&
-                service.map(({ id, title, content, imageURL, icon }) => (
-                  <Tab
-                    key={id}
-                    id={id}
-                    title={
-                      <div className='flex flex-col gap-2 justify-between items-center'>
-                        <svg
-                          fill={icon.fill}
-                          className={`${icon.className}`}
-                          stroke={icon.stroke}
-                          strokeWidth={icon.strokeWidth}
-                          viewBox={icon.viewBox}
-                        >
-                          <path
-                            d={icon.d}
-                            strokeLinecap={icon.strokeLinecap}
-                            strokeLinejoin={icon.strokeLinejoin}
-                          />
-                        </svg>
-                        <h2>{icon.label}</h2>
+              {services.map(({ id, title, content, imageURL, icon }) => (
+                <Tab
+                  key={id}
+                  id={id}
+                  title={
+                    <div className='flex flex-col gap-2 justify-between items-center'>
+                      <svg
+                        fill={icon.fill}
+                        className={`${icon.className}`}
+                        stroke={icon.stroke}
+                        strokeWidth={icon.strokeWidth}
+                        viewBox={icon.viewBox}
+                      >
+                        <path
+                          d={icon.d}
+                          strokeLinecap={icon.strokeLinecap}
+                          strokeLinejoin={icon.strokeLinejoin}
+                        />
+                      </svg>
+                      <h2>{icon.label}</h2>
+                    </div>
+                  }
+                >
+                  <Card className='w-full bg-background-800 md:h-[350px] sm:h-[470px] h-[550px] flex flex-col items-center justify-center md:flex-row p-0'>
+                    <CardHeader className='w-full md:w-auto md:h-full'>
+                      <div className='w-full h-full overflow-hidden rounded-2xl'>
+                        <Image
+                          isZoomed
+                          removeWrapper
+                          className='w-full md:w-[300px] h-[200px] md:h-full object-cover'
+                          src={imageURL}
+                          alt={`image for ${id}`}
+                        />
                       </div>
-                    }
-                  >
-                    <Card className='w-full bg-background-800 md:h-[350px] sm:h-[470px] h-[550px] flex flex-col items-center justify-center md:flex-row p-0'>
-                      <CardHeader className='w-full md:w-auto md:h-full'>
-                        <div className='w-full h-full overflow-hidden rounded-2xl'>
-                          <Image
-                            isZoomed
-                            removeWrapper
-                            className='w-full md:w-[300px] h-[200px] md:h-full object-cover'
-                            src={imageURL}
-                            alt={`image for ${id}`}
-                          />
-                        </div>
-                      </CardHeader>
-                      <CardBody className='w-full flex flex-col gap-2 md:px-4'>
-                        <h2 className='text-lg text-primary'>{title}</h2>
-                        <div className='flex flex-col gap-3'>
-                          <p className='text-foreground/70 text-sm sm:text-base'>
-                            {content}
-                          </p>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  </Tab>
-                ))}
+                    </CardHeader>
+                    <CardBody className='w-full flex flex-col gap-2 md:px-4'>
+                      <h2 className='text-lg text-primary'>{title}</h2>
+                      <div className='flex flex-col gap-3'>
+                        <p className='text-foreground/70 text-sm sm:text-base'>
+                          {content}
+                        </p>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </Tab>
+              ))}
 
             </Tabs>
           </div>

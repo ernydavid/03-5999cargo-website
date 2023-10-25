@@ -2,45 +2,21 @@ import { Link } from 'react-router-dom'
 import { TitleH1 } from '../components/TitleH1'
 import { CircularProgress } from '@nextui-org/react'
 import { PatternCardBackground } from '../assets'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { UserContext } from '../context/userContext'
 import { useUser } from '../hooks/useUser'
 import { CouponCard, Footer } from '../components'
 import { ArrowLink } from '../components/ArrowLink'
 import { PromotionCard } from '../components/PromotionCard'
+import coupons from '../json/coupons.json'
+import promotions from '../json/promotions.json'
 
 export default function CouponsPage () {
   const { userData } = useContext(UserContext)
   const { isSession } = useUser()
-  const [coupons, setCoupons] = useState([])
-  const [promotions, setPromotions] = useState([])
-  const [noCoupons, setNoCoupons] = useState(null)
-  const [noPromotions, setNoPromotions] = useState(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-
-    fetch('/assets/coupons.json')
-      .then(res => {
-        if (!res.ok) {
-          setNoCoupons('Coupons are not availables')
-        } else {
-          res.json().then(data => {
-            setCoupons(data)
-          })
-        }
-      })
-
-    fetch('/assets/promotions.json')
-      .then(res => {
-        if (!res.ok) {
-          setNoPromotions('Promotions are not availables')
-        } else {
-          res.json().then(data => {
-            setPromotions(data)
-          })
-        }
-      })
   }, [])
 
   const firstName = isSession ? userData?.firstName.toLowerCase() : 'Guest'
@@ -49,60 +25,58 @@ export default function CouponsPage () {
   return (
     <div className='max-w-[1000px] p-4 m-auto flex flex-col justify-center items-center relative'>
 
-      {
-        isSession &&
-          <div className='relative w-full min-h-[250px] overflow-hidden bg-[#06153F] rounded-t-xl flex flex-col p-4 text-white'>
-            <PatternCardBackground />
-            <div className='z-10 mt-6 px-4 flex flex-col sm:flex-row justify-center items-center gap-3'>
-              <div className='flex flex-col gap-3 items-center sm:items-start justify-start sm:w-full'>
-                <div>
-                  <h1 className='text-3xl capitalize text-inherit font-semibold text-center md:text-left'>{`Hi, ${firstName} ${lastName}`}</h1>
-                </div>
-                <div className='text-center md:text-left'>
-                  <span
-                    className='text-lg'
-                  >Your level is <strong>Basic Level®</strong>
-                  </span>
-                </div>
-                <div className='flex flex-col justify-center sm:items-start items-center text-center md:text-left'>
-                  <p
-                    className='text-sm'
-                  >Your available points:&nbsp;<strong>0 pts.</strong>
-                  </p>
-                  <p className='text-sm'>With&nbsp;<strong>1200 pts</strong>&nbsp;you upgrade your level</p>
-                </div>
+      {isSession &&
+        <div className='relative w-full min-h-[250px] overflow-hidden bg-[#06153F] rounded-t-xl flex flex-col p-4 text-white'>
+          <PatternCardBackground />
+          <div className='z-10 mt-6 px-4 flex flex-col sm:flex-row justify-center items-center gap-3'>
+            <div className='flex flex-col gap-3 items-center sm:items-start justify-start sm:w-full'>
+              <div>
+                <h1 className='text-3xl capitalize text-inherit font-semibold text-center md:text-left'>{`Hi, ${firstName} ${lastName}`}</h1>
               </div>
-              <div className='flex sm:flex-col items-center justify-between sm:gap-1 sm:mt-0 mt-5'>
-                <CircularProgress
-                  aria-label='circular-progress'
-                  className='sm:flex hidden'
-                  classNames={{
-                    svg: 'w-36 h-36 drop-shadow-md',
-                    indicator: 'stroke-white',
-                    track: 'stroke-white/10',
-                    value: 'text-3xl font-semibold text-white'
-                  }}
-                  formatOptions={{
-                    unitDisplay: 'short',
-                    unit: 'percent'
-                  }}
-                  maxValue={5000}
-                  value={0}
-                  strokeWidth={4}
-                  showValueLabel
-                />
-                <div className='flex flex-col items-center'>
-                  <Link
-                    className='text-xs text-center text-white/70 hover:underline'
-                    to='/dashboard'
-                  >
-                    Upgrade your level by accumulating points for every shipment. Learn more here
-                  </Link>
-                </div>
+              <div className='text-center md:text-left'>
+                <span
+                  className='text-lg'
+                >Your level is <strong>Basic Level®</strong>
+                </span>
+              </div>
+              <div className='flex flex-col justify-center sm:items-start items-center text-center md:text-left'>
+                <p
+                  className='text-sm'
+                >Your available points:&nbsp;<strong>0 pts.</strong>
+                </p>
+                <p className='text-sm'>With&nbsp;<strong>1200 pts</strong>&nbsp;you upgrade your level</p>
+              </div>
+            </div>
+            <div className='flex sm:flex-col items-center justify-between sm:gap-1 sm:mt-0 mt-5'>
+              <CircularProgress
+                aria-label='circular-progress'
+                className='sm:flex hidden'
+                classNames={{
+                  svg: 'w-36 h-36 drop-shadow-md',
+                  indicator: 'stroke-white',
+                  track: 'stroke-white/10',
+                  value: 'text-3xl font-semibold text-white'
+                }}
+                formatOptions={{
+                  unitDisplay: 'short',
+                  unit: 'percent'
+                }}
+                maxValue={5000}
+                value={0}
+                strokeWidth={4}
+                showValueLabel
+              />
+              <div className='flex flex-col items-center'>
+                <Link
+                  className='text-xs text-center text-white/70 hover:underline'
+                  to='/dashboard'
+                >
+                  Upgrade your level by accumulating points for every shipment. Learn more here
+                </Link>
               </div>
             </div>
           </div>
-      }
+        </div>}
 
       <section className='mt-6 w-full flex flex-col md:justify-start items-start md:items-start justify-center gap-6'>
         <div className='w-full flex items-center justify-between'>
@@ -112,8 +86,8 @@ export default function CouponsPage () {
 
         <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
           {
-            noCoupons
-              ? <p className='text-center'>{noCoupons}</p>
+            coupons === null || undefined
+              ? <p className='text-center'>No coupons</p>
               : coupons.map(({ id, title, discountNumber, image }) => (
                 <CouponCard
                   id={id}
@@ -136,8 +110,8 @@ export default function CouponsPage () {
 
         <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
           {
-            noPromotions
-              ? <p className='text-center'>{noPromotions}</p>
+            promotions === null || undefined
+              ? <p className='text-center'>No promotions</p>
               : promotions.map(({ id, title, levelPromotion, image }) => (
                 <PromotionCard
                   key={id}
