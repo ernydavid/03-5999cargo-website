@@ -76,7 +76,7 @@ export function useUser () {
 
   const validateUserData = useCallback(() => {
     const isUserDataComplete = async () => {
-      const { user } = sessionUser
+      const { user } = sessionUser || null
 
       const { data, error } = await supabase
         .from('profiles')
@@ -95,7 +95,7 @@ export function useUser () {
   }, [setSessionUser])
 
   const getDataFromUser = useCallback(() => {
-    const { user } = sessionUser
+    const { user } = sessionUser || null
 
     const getUserData = async () => {
       const { data, error } = await supabase
